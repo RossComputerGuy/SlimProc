@@ -2,11 +2,23 @@
 
 #define REG_PC 0
 #define REG_FLAGS 1
+#define REG_SKPTR 2
+#define REG_ADDR0 3
+#define REG_ADDR1 4
+#define REG_ADDR2 5
+#define REG_ADDR3 6
+#define REG_ADDR4 7
+#define REG_ADDR5 8
+
+#define NREG_ADDR (REG_ADDR5 - REG_ADDR0)
 
 typedef struct {
 	unsigned long pc;
 	unsigned int flags;
+	unsigned long addr[NREG_ADDR];
 } __attribute__((packed)) regs_t;
+
+#define STACK_SIZE (0x16000)
 
 /** No operation **/
 #define INST_NOP 0
@@ -52,12 +64,7 @@ typedef struct {
 #define FLAG_INTING 0
 
 /** Descriptor table **/
-typedef struct {
-	unsigned long address;
-	unsigned int length;
-} __attribute__((packed)) desctbl_t;
-
-#define IVT_SIZE (sizeof(desctbl_t) * (sizeof(unsigned long) * 2))
+#define IVT_SIZE (sizeof(unsigned int) + (sizeof(unsigned long) * 2))
 
 /** IVT Entries **/
 #define IVT_DIV0 0
