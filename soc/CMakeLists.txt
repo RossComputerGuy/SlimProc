@@ -6,7 +6,7 @@ pkg_check_modules(SystemC REQUIRED systemc)
 
 include_directories("${PROJECT_SOURCE_DIR}/include")
 
-add_executable(soc src/main.cpp)
+add_executable(soc src/cpu.cpp src/main.cpp)
 target_link_libraries(soc ${SystemC_LIBRARIES})
 target_include_directories(soc PUBLIC ${SystemC_INCLUDE_DIRS})
 target_compile_options(soc PUBLIC ${SystemC_CFLAGS_OTHER})

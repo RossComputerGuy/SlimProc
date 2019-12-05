@@ -3,6 +3,11 @@
 #define REG_PC 0
 #define REG_FLAGS 1
 
+typedef struct {
+	unsigned long pc;
+	unsigned int flags;
+} __attribute__((packed)) regs_t;
+
 /** No operation **/
 #define INST_NOP 0
 
@@ -38,11 +43,21 @@
 #define INST_PUSH 23
 #define INST_POP 24
 
+/** Exceptions and interrupts **/
+#define INST_IRET 25
+#define INST_INT 26
+#define INST_LDIVT 27
+
+/** CPU Flag fields **/
+#define FLAG_INTING 0
+
 /** Descriptor table **/
 typedef struct {
 	unsigned long address;
 	unsigned int length;
-} desctbl_t;
+} __attribute__((packed)) desctbl_t;
+
+#define IVT_SIZE (sizeof(desctbl_t) * (sizeof(unsigned long) * 2))
 
 /** IVT Entries **/
 #define IVT_DIV0 0
