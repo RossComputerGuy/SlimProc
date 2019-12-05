@@ -1,4 +1,4 @@
 cmake_minimum_required(VERSION 3.15)
 project(slimproc NONE)
 
-add_subdirectory(fpga)
+add_subdirectory(soc)
