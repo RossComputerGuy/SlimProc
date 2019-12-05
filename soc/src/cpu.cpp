@@ -36,9 +36,9 @@ void cpu::step() {
 				unsigned long wrote = regwrite(dest, res);
 				if (wrote != res) {
 					if (wrote < res && wrote >= 0) {
-						// TODO: overflow
+						interrupt(IVT_OVERFLOW);
 					} else if (wrote == -1 || wrote == -2) {
-						// TODO: error code
+						interrupt(wrote == -1 ? IVT_PROTECTION : IVT_UNKNOWN_OPCODE);
 					}
 				}
 			}
@@ -49,9 +49,9 @@ void cpu::step() {
 				unsigned long wrote = regwrite(dest, res);
 				if (wrote != res) {
 					if (wrote < res && wrote >= 0) {
-						// TODO: overflow
+						interrupt(IVT_OVERFLOW);
 					} else if (wrote == -1 || wrote == -2) {
-						// TODO: error code
+						interrupt(wrote == -1 ? IVT_PROTECTION : IVT_UNKNOWN_OPCODE);
 					}
 				}
 			}
@@ -62,9 +62,9 @@ void cpu::step() {
 				unsigned long wrote = regwrite(dest, res);
 				if (wrote != res) {
 					if (wrote < res && wrote >= 0) {
-						// TODO: overflow
+						interrupt(IVT_OVERFLOW);
 					} else if (wrote == -1 || wrote == -2) {
-						// TODO: error code
+						interrupt(wrote == -1 ? IVT_PROTECTION : IVT_UNKNOWN_OPCODE);
 					}
 				}
 			}
@@ -72,15 +72,16 @@ void cpu::step() {
 		case INST_DIV:
 			{
 				if (regread(op2) == 0) {
-					// TODO: handle division by zero
+					interrupt(IVT_DIV_BY_ZERO);
+					break;
 				}
 				unsigned long res = regread(op1) / regread(op2);
 				unsigned long wrote = regwrite(dest, res);
 				if (wrote != res) {
 					if (wrote < res && wrote >= 0) {
-						// TODO: overflow
+						interrupt(IVT_OVERFLOW);
 					} else if (wrote == -1 || wrote == -2) {
-						// TODO: error code
+						interrupt(wrote == -1 ? IVT_PROTECTION : IVT_UNKNOWN_OPCODE);
 					}
 				}
 			}
@@ -91,12 +92,195 @@ void cpu::step() {
 				unsigned long wrote = regwrite(dest, res);
 				if (wrote != res) {
 					if (wrote < res && wrote >= 0) {
-						// TODO: overflow
+						interrupt(IVT_OVERFLOW);
 					} else if (wrote == -1 || wrote == -2) {
-						// TODO: error code
+						interrupt(wrote == -1 ? IVT_PROTECTION : IVT_UNKNOWN_OPCODE);
 					}
 				}
 			}
+			break;
+		case INST_AND:
+			{
+				unsigned long res = regread(op1) & regread(op2);
+				unsigned long wrote = regwrite(dest, res);
+				if (wrote != res) {
+					if (wrote < res && wrote >= 0) {
+						interrupt(IVT_OVERFLOW);
+					} else if (wrote == -1 || wrote == -2) {
+						interrupt(wrote == -1 ? IVT_PROTECTION : IVT_UNKNOWN_OPCODE);
+					}
+				}
+			}
+			break;
+		case INST_OR:
+			{
+				unsigned long res = regread(op1) | regread(op2);
+				unsigned long wrote = regwrite(dest, res);
+				if (wrote != res) {
+					if (wrote < res && wrote >= 0) {
+						interrupt(IVT_OVERFLOW);
+					} else if (wrote == -1 || wrote == -2) {
+						interrupt(wrote == -1 ? IVT_PROTECTION : IVT_UNKNOWN_OPCODE);
+					}
+				}
+			}
+			break;
+		case INST_XOR:
+			{
+				unsigned long res = regread(op1) ^ regread(op2);
+				unsigned long wrote = regwrite(dest, res);
+				if (wrote != res) {
+					if (wrote < res && wrote >= 0) {
+						interrupt(IVT_OVERFLOW);
+					} else if (wrote == -1 || wrote == -2) {
+						interrupt(wrote == -1 ? IVT_PROTECTION : IVT_UNKNOWN_OPCODE);
+					}
+				}
+			}
+			break;
+		case INST_NOT:
+			{
+				unsigned long res = ~regread(op1);
+				unsigned long wrote = regwrite(dest, res);
+				if (wrote != res) {
+					if (wrote < res && wrote >= 0) {
+						interrupt(IVT_OVERFLOW);
+					} else if (wrote == -1 || wrote == -2) {
+						interrupt(wrote == -1 ? IVT_PROTECTION : IVT_UNKNOWN_OPCODE);
+					}
+				}
+			}
+			break;
+		case INST_LSHF:
+			{
+				unsigned long res = regread(op1) << regread(op2);
+				unsigned long wrote = regwrite(dest, res);
+				if (wrote != res) {
+					if (wrote < res && wrote >= 0) {
+						interrupt(IVT_OVERFLOW);
+					} else if (wrote == -1 || wrote == -2) {
+						interrupt(wrote == -1 ? IVT_PROTECTION : IVT_UNKNOWN_OPCODE);
+					}
+				}
+			}
+			break;
+		case INST_RSHF:
+			{
+				unsigned long res = regread(op1) >> regread(op2);
+				unsigned long wrote = regwrite(dest, res);
+				if (wrote != res) {
+					if (wrote < res && wrote >= 0) {
+						interrupt(IVT_OVERFLOW);
+					} else if (wrote == -1 || wrote == -2) {
+						interrupt(wrote == -1 ? IVT_PROTECTION : IVT_UNKNOWN_OPCODE);
+					}
+				}
+			}
+			break;
+		case INST_LT:
+			{
+				unsigned long res = regread(op1) < regread(op2);
+				unsigned long wrote = regwrite(dest, res);
+				if (wrote != res) {
+					if (wrote == -1 || wrote == -2) {
+						interrupt(wrote == -1 ? IVT_PROTECTION : IVT_UNKNOWN_OPCODE);
+					}
+				}
+			}
+			break;
+		case INST_GT:
+			{
+				unsigned long res = regread(op1) > regread(op2);
+				unsigned long wrote = regwrite(dest, res);
+				if (wrote != res) {
+					if (wrote == -1 || wrote == -2) {
+						interrupt(wrote == -1 ? IVT_PROTECTION : IVT_UNKNOWN_OPCODE);
+					}
+				}
+			}
+			break;
+		case INST_EQ:
+			{
+				unsigned long res = regread(op1) == regread(op2);
+				unsigned long wrote = regwrite(dest, res);
+				if (wrote != res) {
+					if (wrote == -1 || wrote == -2) {
+						interrupt(wrote == -1 ? IVT_PROTECTION : IVT_UNKNOWN_OPCODE);
+					}
+				}
+			}
+			break;
+		case INST_JEQ:
+			if (regread(dest) == op1) pc = op2;
+			break;
+		case INST_JNEQ:
+			if (regread(dest) != op1) pc = op2;
+			break;
+		case INST_LOAD:
+			mmu_value.write(regread(dest));
+			mmu_read.write(true);
+			wait(read_delay);
+			break;
+		case INST_STORE:
+			{
+				mmu_addr.write(op1);
+				mmu_read.write(true);
+				wait(read_delay);
+				sc_uint_base res(mmu_data);
+				sc_uint<32> wrote(regwrite(dest, res));
+				if (wrote != mmu_data) {
+					if (wrote == -1 || wrote == -2) {
+						interrupt(wrote == -1 ? IVT_PROTECTION : IVT_UNKNOWN_OPCODE);
+						break;
+					}
+				}
+			}
+			break;
+		case INST_SET:
+			{
+				sc_uint<32> wrote(regwrite(dest, op1));
+				if (wrote != op1) {
+					if (wrote == -1 || wrote == -2) {
+						interrupt(wrote == -1 ? IVT_PROTECTION : IVT_UNKNOWN_OPCODE);
+						break;
+					}
+				}
+			}
+			break;
+		case INST_JMP:
+			pc = op1;
+			break;
+		case INST_RET:
+			pc = stack_pop();
+			break;
+		case INST_CALL:
+			stack_push(pc);
+			pc = regread(op1);
+			break;
+		case INST_PUSH:
+			stack_push(regread(op1));
+			break;
+		case INST_POP:
+			{
+				unsigned long res = stack_pop();
+				unsigned long wrote = regwrite(dest, res);
+				if (res != wrote) {
+					if (wrote == -1 || wrote == -2) {
+						interrupt(wrote == -1 ? IVT_PROTECTION : IVT_UNKNOWN_OPCODE);
+						break;
+					}
+				}
+			}
+			break;
+		case INST_IRET:
+			loadregs(&intr_regs);
+			is_int = false;
+			break;
+		case INST_INT:
+			interrupt(regread(op1));
+			break;
+		case INST_LDIVT:
+			ivt_addr = regread(op1);
 			break;
 	}
 }
@@ -133,6 +317,17 @@ unsigned long cpu::regwrite(int reg, unsigned long data) {
 }
 
 unsigned long cpu::regread(int reg) {
+	switch (reg) {
+		case REG_PC: return pc;
+		case REG_FLAGS: return getflags();
+		case REG_SKPTR: return reg_skptr;
+		case REG_ADDR0: return reg_addr0;
+		case REG_ADDR1: return reg_addr1;
+		case REG_ADDR2: return reg_addr2;
+		case REG_ADDR3: return reg_addr3;
+		case REG_ADDR4: return reg_addr4;
+		case REG_ADDR5: return reg_addr5;
+	}
 	return 0;
 }
 

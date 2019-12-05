@@ -5,6 +5,7 @@
 
 struct cpu : sc_module {
 	sc_out<sc_uint<32>> mmu_addr;
+	sc_out<sc_uint<32>> mmu_value;
 	sc_out<bool> mmu_read;
 	sc_out<bool> mmu_write;
 	sc_in<sc_uint<32>> mmu_data;

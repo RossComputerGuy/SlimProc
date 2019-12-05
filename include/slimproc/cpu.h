@@ -64,8 +64,10 @@ typedef struct {
 #define FLAG_INTING 0
 
 /** Descriptor table **/
-#define IVT_SIZE (sizeof(unsigned int) + (sizeof(unsigned long) * 2))
+#define IVT_SIZE (sizeof(unsigned int) + (sizeof(unsigned long) * 4))
 
 /** IVT Entries **/
-#define IVT_DIV0 0
-#define IVT_OVR 1
+#define IVT_DIV_BY_ZERO 0
+#define IVT_OVERFLOW 1
+#define IVT_PROTECTION 2
+#define IVT_UNKNOWN_OPCODE 3
