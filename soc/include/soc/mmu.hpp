@@ -42,9 +42,7 @@ SC_MODULE(mmu) {
 		SC_CTOR(mmu) {
 			this->map(MMU_ADDR_RAM, MMU_SIZE_RAM, MMU_ENTRY_RWE);
 		}
-	private:
-		std::list<mmu_entry_t> entries;
-	protected:
+
 		virtual int write(sc_uint<32> address, sc_uint<32> data);
 		virtual sc_uint<32> read(sc_uint<32> address);
 		virtual mmu_entry_t get_mapped_foraddress(sc_uint<32> address);
@@ -52,4 +50,6 @@ SC_MODULE(mmu) {
 		virtual void map(sc_uint<32> address, sc_uint<32> size, uint8_t flags, void* ptr);
 		virtual void map(sc_uint<32> address, sc_uint<32> size, uint8_t flags, mmu_read read, mmu_write write);
 		virtual void unmap(sc_uint<32> address);
+	private:
+		std::list<mmu_entry_t> entries;
 };
